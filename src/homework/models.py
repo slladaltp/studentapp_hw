@@ -53,6 +53,6 @@ class Lesson(DateTimeMixin, Model):
     lesson_type = CharField(max_length=50, default='Practice')
 
 class EmailForms(forms.Form):
-    """Форма для получения почты!"""
+    """Форма для получения почты! """
 
     email = forms.EmailField(max_length=85)
