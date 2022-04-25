@@ -19,7 +19,7 @@ from homework.views import index, index_with_get, students_json, \
     person_add, person_list, person_delete, person_update, group_add, \
     group_list, group_delete, group_update, subject_add, subject_list, subject_delete, \
     subject_update, course_add, course_list, course_delete, course_update, lesson_add, \
-    lesson_list, lesson_delete, lesson_update
+    lesson_list, lesson_delete, lesson_update, reset_password, email_verification, welcome_email
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -46,4 +46,7 @@ urlpatterns = [
     path('lesson/list', lesson_list),
     path('lesson/delete', lesson_delete),
     path('lesson/update', lesson_update),
+    path('welcome_email', welcome_email),
+    path('reset_password', reset_password),
+    path('email_verification', email_verification)
 ]

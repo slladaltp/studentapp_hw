@@ -1,4 +1,5 @@
 from django.db.models import Model, CharField, DateTimeField, IntegerField
+from django import forms
 
 # Create your models here.
 
@@ -50,3 +51,9 @@ class Lesson(DateTimeMixin, Model):
 
     lesson_name = CharField(max_length=50)
     lesson_type = CharField(max_length=50, default='Practice')
+
+
+class EmailForms(forms.Form):
+    """Форма для получения почты! """
+
+    email = forms.EmailField(max_length=85)
