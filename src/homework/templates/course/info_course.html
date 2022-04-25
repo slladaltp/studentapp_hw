@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Info Course
+{% endblock %}
+
+{% block content %}
+    <a href="/list_course/">Back</a><br>
+    {{ course.id }}: {{ course.name }} {{ course.type }}<br>
+    <b>Created:</b> {{ course.created_at }}<br>
+    <b>Updated:</b> {{ course.updated_at }}<br><br>
+    <a href="{% url 'update_course' pk=course.id %}">Update</a>
+    <a href="{% url 'delete_course' pk=course.id %}">Delete</a>
+{% endblock %}<!DOCTYPE html>

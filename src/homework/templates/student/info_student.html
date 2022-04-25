@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Info Student
+{% endblock %}
+
+{% block content %}
+    <a href="/list_student/">Back</a><br>
+    {{ student.id }}: {{ student.first_name }} {{ student.last_name }}<br>
+    <b>Created:</b> {{ student.created_at }}<br>
+    <b>Updated:</b> {{ student.updated_at }}<br>
+{% endblock %}<!DOCTYPE html>

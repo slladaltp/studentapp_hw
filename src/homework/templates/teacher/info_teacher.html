@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Info Teacher
+{% endblock %}
+
+{% block content %}
+    <a href="/list_course/">Back</a><br>
+    {{ teacher.id }}: {{ teacher.first_name }} {{ teacher.last_name }}<br>
+    {{ teacher.age }} {{ teacher.status }}<br>
+    <b>Created:</b> {{ course.created_at }}<br>
+    <b>Updated:</b> {{ course.updated_at }}<br><br>
+    <a href="{% url 'update_teacher' pk=teacher.id %}">Update</a>
+    <a href="{% url 'delete_teacher' pk=teacher.id %}">Delete</a>
+{% endblock %}<!DOCTYPE html>

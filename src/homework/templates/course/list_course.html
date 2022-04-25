@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    List Course
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'add_course' %}">Add</a>
+    <ul>
+    {% for course in object_list %}
+        <li>
+        <a href="{% url 'info_course' pk=course.id %}">{{ course.id }}: {{ course.name }} {{ course.type }}</a>
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,223 +1,176 @@
-from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from .models import EmailForms
-from homework.models import Student, Person, Group, Subject, Course, Lesson
+from django.http import HttpResponse
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView, View
+from django.views.generic.edit import UpdateView, DeleteView, CreateView
+from homework.forms import IndexForm, EmailSendForm
+from homework.models import Student, Course, Teacher
+from django.urls import reverse_lazy
+
+from homework.send_email import send
 # Create your views here.
 
 
-def index(request):
-    return HttpResponse('Hello World')
+class IndexView(View):
 
+    def get(self, request):
+        return render(request, 'index.html', {
+            'form': IndexForm(),
+        })
 
-def students_json(request):
-    students = Student.objects.all()
-    return JsonResponse({'students': list(students)})
+    def post(self, request):
 
+        form = IndexForm(request.POST)
+        if form.is_valid():
+            student = Student()
+            student.first_name = form.cleaned_data['first_name']
 
-def person_add(request):
-    new_person = Person()
-    new_person.first_name = 'Anton'
-    new_person.last_name = 'Gerashenko'
-    new_person.type_person = 'Mage'
-    new_person.save()
+            student.save()
 
-    return HttpResponse('Added')
+            return HttpResponse('Saved')
 
+        return HttpResponse('Not Saved')
 
-def person_list(request):
-    person = Person.objects.all().values()
-    return JsonResponse({'person': list(person)})
 
+class StudentListView(ListView):
 
-def person_delete(request):
+    model = Student
+    template_name = 'student/list_student.html'
 
-    try:
-        delete_person = Person.objects.get(first_name='Anton')
-    except (Person.MultipleObjectsReturned):
-        delete_person = Person.objects.filter(first_name='Anton')[0]
-    except Person.DoesNotExist:
-        delete_person = None
 
-    if delete_person is None:
-        return HttpResponse('Not exist')
-    else:
-        delete_person.delete()
+class StudentListDetail(DetailView):
 
-    return HttpResponse('Deleted')
+    model = Student
+    template_name = 'student/info_student.html'
 
 
-def person_update(request):
-    update_person = Person.objects.get(first_name='Anton')
-    update_person.last_name = 'Gerashenko'
-    update_person.save()
-    return HttpResponse('Updated')
+class StudentListUpdate(UpdateView):
 
+    model = Student
+    fields = ['first_name', 'last_name']
+    template_name = 'student/update_student.html'
+    success_url = reverse_lazy('list_student')
 
-def group_add(request):
-    new_group = Group()
-    new_group.group_name = 'Python'
-    new_group.group_city = 'Odesa'
-    new_group.save()
 
-    return HttpResponse('Added')
+class StudentListDelete(DeleteView):
 
+    model = Student
+    template_name = 'student/delete_student.html'
+    success_url = reverse_lazy('list_student')
 
-def group_list(request):
-    group = Group.objects.all().values()
-    return JsonResponse({'group': list(group)})
 
+class StudentListAdd(CreateView):
 
-def group_delete(request):
+    model = Student
+    fields = ['first_name', 'last_name']
+    template_name = 'student/add_student.html'
+    success_url = reverse_lazy('list_student')
 
-    try:
-        delete_group = Group.objects.get(group_name='Python')
-    except (Group.MultipleObjectsReturned):
-        delete_group = Group.objects.filter(group_name='Python')[0]
-    except Group.DoesNotExist:
-        delete_group = None
 
-    if delete_group is None:
-        return HttpResponse('Not exist')
-    else:
-        delete_group.delete()
+class CourseListView(ListView):
 
-    return HttpResponse('Deleted')
+    model = Course
+    template_name = 'course/list_course.html'
 
 
-def group_update(request):
-    update_group = Group.objects.get(group_name='Python')
-    update_group.group_city = 'Kyiv'
-    update_group.save()
-    return HttpResponse('Updated')
+class CourseListDetail(DetailView):
 
+    model = Course
+    template_name = 'course/info_course.html'
 
-def subject_add(request):
-    new_subject = Subject()
-    new_subject.subject_name = 'Python'
-    new_subject.save()
 
-    return HttpResponse('Added')
+class CourseListUpdate(UpdateView):
 
+    model = Course
+    fields = ['name']
+    template_name = 'course/update_course.html'
+    success_url = reverse_lazy('list_course')
 
-def subject_list(request):
-    subject = Subject.objects.all().values()
-    return JsonResponse({'subject': list(subject)})
 
+class CourseListDelete(DeleteView):
 
-def subject_delete(request):
+    model = Course
+    template_name = 'course/delete_course.html'
+    success_url = reverse_lazy('list_course')
 
-    try:
-        delete_subject = Subject.objects.get(subject_name='Python')
-    except (Subject.MultipleObjectsReturned):
-        delete_subject = Subject.objects.filter(subject_name='Python')[0]
-    except Subject.DoesNotExist:
-        delete_subject = None
 
-    if delete_subject is None:
-        return HttpResponse('Not exist')
-    else:
-        delete_subject.delete()
+class CourseListAdd(CreateView):
 
-    return HttpResponse('Deleted')
+    model = Course
+    fields = ['name', 'type']
+    template_name = 'course/add_course.html'
+    success_url = reverse_lazy('list_course')
 
 
-def subject_update(request):
-    update_subject = Subject.objects.get(subject_name='Python')
-    update_subject.subject_level = 'Hard'
-    update_subject.save()
-    return HttpResponse('Updated')
+class TeacherListView(ListView):
 
+    model = Teacher
+    template_name = 'teacher/list_teacher.html'
 
-def course_add(request):
-    new_course = Course()
-    new_course.course_name = 'Python'
-    new_course.save()
-    return HttpResponse('Added')
 
+class TeacherListDetail(DetailView):
 
-def course_list(request):
-    course = Course.objects.all().values()
-    return JsonResponse({'course': list(course)})
+    model = Teacher
+    template_name = 'teacher/info_teacher.html'
 
 
-def course_delete(request):
+class TeacherListUpdate(UpdateView):
 
-    try:
-        delete_course = Course.objects.get(course_name='Python')
-    except (Course.MultipleObjectsReturned):
-        delete_course = Subject.objects.filter(course_name='Python')[0]
-    except Course.DoesNotExist:
-        delete_course = None
+    model = Teacher
+    fields = ['first_name', 'last_name', 'age', 'status']
+    template_name = 'teacher/update_teacher.html'
+    success_url = reverse_lazy('list_teacher')
 
-    if delete_course is None:
-        return HttpResponse('Not exist')
-    else:
-        delete_course.delete()
 
-    return HttpResponse('Deleted')
+class TeacherListDelete(DeleteView):
 
+    model = Teacher
+    template_name = 'teacher/delete_teacher.html'
+    success_url = reverse_lazy('list_teacher')
 
-def course_update(request):
-    update_course = Course.objects.get(course_name='Python')
-    update_course.course_type = 'telekinesis'
-    update_course.save()
-    return HttpResponse('Updated')
 
+class TeacherListAdd(CreateView):
 
-def lesson_add(request):
-    new_lesson = Lesson()
-    new_lesson.lesson_name = 'Python'
-    new_lesson.save()
-    return HttpResponse('Added')
+    model = Teacher
+    fields = ['first_name', 'last_name', 'age', 'status']
+    template_name = 'teacher/add_teacher.html'
+    success_url = reverse_lazy('list_teacher')
 
 
-def lesson_list(request):
-    lesson = Lesson.objects.all().values()
-    return JsonResponse({'lesson': list(lesson)})
+def base_template(request):
+    return render(request, 'base.html')
 
 
-def lesson_delete(request):
+def get_reset_password(request):
+    return render(request, 'email/reset_password.html')
 
-    try:
-        delete_lesson = Lesson.objects.get(lesson_name='Python')
-    except (Lesson.MultipleObjectsReturned):
-        delete_lesson = Lesson.objects.filter(lesson_name='Python')[0]
-    except Lesson.DoesNotExist:
-        delete_lesson = None
 
-    if delete_lesson is None:
-        return HttpResponse('Not exist')
-    else:
-        delete_lesson.delete()
+def get_welcome_email(request):
+    return render(request, 'email/welcome_email.html')
 
-    return HttpResponse('Deleted')
 
+def get_email_verification(request):
+    return render(request, 'email/email_verification.html')
 
-def lesson_update(request):
-    update_lesson = Lesson.objects.get(lesson_name='Python')
-    update_lesson.lesson_type = 'Theory'
-    update_lesson.save()
-    return HttpResponse('Updated')
 
+class SendMailPage(View):
 
-def index_with_get(request):
-    name = request.GET.get('name')
-    if not name:
-        name = 'stranger'
-    return HttpResponse(f'Hello, {name}')
+    def get(self, request):
+        return render(request, 'email/send_mail.html', {
+            'form': EmailSendForm(),
+        })
 
+    def post(self, request):
+        form = EmailSendForm(request.POST)
+        if form.is_valid():
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+            to_email = form.cleaned_data['to_email']
 
-def reset_password(request):
-    return render(request, 'reset_password.html', {
-        "form": EmailForms()
-    })
+            send(subject, to_email, 'email/mail_base.html', context={
+                'message': message,
+            }
+                 )
+            return HttpResponse('Was Sent')
 
-
-def email_verification(request):
-    return render(request, 'email_verification.html', {
-        "form": EmailForms()
-    })
-
-
-def welcome_email(request):
-    return render(request, 'welcome.email')
+        return HttpResponse('Error')

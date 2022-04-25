@@ -5,23 +5,27 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    initial = True
-
     dependencies = [
+        ('homework', '0005_course_group_lesson_person_subject_student_last_name'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Student',
+            name='Teacher',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_at', models.DateTimeField(auto_now_add=True, null=True)),
-                ('updated_ad', models.DateTimeField(auto_now=True)),
-                ('name', models.CharField(max_length=50)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+                ('first_name', models.CharField(max_length=50)),
                 ('last_name', models.CharField(max_length=50)),
+                ('age', models.IntegerField(default='0')),
+                ('status', models.CharField(default='Active', max_length=50)),
             ],
             options={
                 'abstract': False,
             },
+        ),
+        migrations.DeleteModel(
+            name='Person',
         ),
     ]

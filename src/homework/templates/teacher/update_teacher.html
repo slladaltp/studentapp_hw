@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Update Teacher
+{% endblock %}
+
+{% block content %}
+    <form action="{% url 'update_teacher' pk=teacher.id %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Update">
+    </form>
+{% endblock %}

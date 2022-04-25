@@ -2,22 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %} Title {% endblock %}</title>
-
-    <style>
-        #base {
-          text-align: center;
-          height: 300px;
-          border: 2px solid red;
-          border-radius: 10px;
-        }
-
-    </style>
+    <title>{% block title %}
+        {% endblock %}</title>
 </head>
 <body>
-    <div id="base">
-        {% block content %} {% endblock %}
-    </div>
-
+{% block content %}
+{% endblock %}<br>
+{% block message %}
+{% endblock %}
 </body>
 </html>
