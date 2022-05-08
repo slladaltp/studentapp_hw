@@ -1,4 +1,4 @@
-from django.db.models import Model, CharField, DateTimeField, IntegerField
+from django.db.models import Model, CharField, DateTimeField, IntegerField, URLField, EmailField
 
 
 class DateTimeMixin(Model):
@@ -11,8 +11,11 @@ class DateTimeMixin(Model):
 
 class Student(DateTimeMixin, Model):
 
-    first_name = CharField(max_length=50)
-    last_name = CharField(max_length=50,  default='Undefined')
+    first_name = CharField(max_length=50,)
+    last_name = CharField(max_length=50, default='Undefined')
+    social_url = URLField(max_length=100)
+    age = IntegerField(default='0')
+    email = EmailField(max_length=100)
 
 
 class Teacher(DateTimeMixin, Model):
