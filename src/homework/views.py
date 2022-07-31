@@ -1,6 +1,4 @@
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
-from .models import EmailForms
 from homework.models import Student, Person, Group, Subject, Course, Lesson
 # Create your views here.
 
@@ -205,19 +203,3 @@ def index_with_get(request):
     if not name:
         name = 'stranger'
     return HttpResponse(f'Hello, {name}')
-
-
-def reset_password(request):
-    return render(request, 'reset_password.html', {
-        "form": EmailForms()
-    })
-
-
-def email_verification(request):
-    return render(request, 'email_verification.html', {
-        "form": EmailForms()
-    })
-
-
-def welcome_email(request):
-    return render(request, 'welcome.email')
